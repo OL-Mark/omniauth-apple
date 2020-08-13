@@ -46,6 +46,16 @@ module OmniAuth
         options[:redirect_uri] || (full_host + script_name + callback_path)
       end
 
+      protected
+
+      def build_access_token
+        if request.params["id_token"]
+          return ::OAuth2::AccessToken.from_hash(client, { access_token: request.params["id_token"] })
+        else
+          super
+        end
+      end
+
       private
 
       def new_nonce
